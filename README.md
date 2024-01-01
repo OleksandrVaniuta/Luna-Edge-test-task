@@ -50,6 +50,10 @@ Imagine that you are a Pokémon trainer where you have to fill out a form with y
 
 ### I wish you the best of luck in your technical test!🤞😄
 
-Стропири форму за домомогою Реакт хук форм, з валидацією що задана в тенічному завданні.
-Створили катсомний селект, та його стріс за допомгою сторібук, у селекті присутній поштук розміщений у дропдауні, пошук виконаний по масиву що приходить з бекенду (нажаль у АПІ немає пожливості виконоти пошук по фрагменту імені на сервері), селект дає модливісті обрати 4 опції, обрані опції у дробдауні виділені іншим кольорм бекграунду.
-Без заповнення вірно форми і обрання менше ніж 4х опцій у секті неможливо відправити форму, кнопка неактивна
+## Done task
+
+- "Created a form using React Hook Form, with validation as specified in the technical task.
+- Developed a custom select component and its story using Storybook.
+- The select component displays a dropdown with options fetched from the backend array (unfortunately, the API doesn't support searching by name fragment on the server side).
+- The select allows selecting up to 4 options, and the selected options are highlighted with a different background color in the dropdown.
+- Without properly filling the form or selecting less than 4 options in the select component, it's impossible to submit the form as the button remains inactive."

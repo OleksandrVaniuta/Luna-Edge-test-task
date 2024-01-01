@@ -24,17 +24,10 @@ const Select: FC<IProps> = ({
   options,
   title,
 }) => {
-  // const [pokemons, setPokemons] = useState<PokemonData[]>([]);
   const [filter, setFilter] = useState<string>('');
   const [openDropDonw, setOpenDropDown] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   fetchAllPokemons().then((data) => {
-  //     setPokemons(data.res);
-  //   });
-  // }, []);
 
   const getVisiblePokemons = (
     options: PokemonData[],
