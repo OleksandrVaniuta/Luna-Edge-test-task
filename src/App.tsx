@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import Select from './Components/CustomSelect/Select';
 import Form from './Components/Form/Form';
-import Button  from './Components/SubmitButton/Button';
+import Button from './Components/SubmitButton/Button';
+import PopupWindow from './Components/Modal/Modal';
+import PokemonsInfo from './Components/ModalContent/ModalContent';
 
 export interface IChoosenPokemons {
   firstName: string;
@@ -15,9 +17,8 @@ function App() {
     lastName: '',
     pokemonsNames: [],
   });
-  console.log(choosenPokemons.pokemonsNames);
 
-  const [modalOpne, setModalOpen] = useState<boolean>(false);
+  const [modalOpnen, setModalOpen] = useState<boolean>(false);
 
   const disabled: boolean =
     choosenPokemons.pokemonsNames.length === 4 &&
@@ -26,13 +27,17 @@ function App() {
 
   return (
     <div>
-      <p>Welcome to Luna Edge technical interview</p>
       <Form setChoosenPokemons={setChoosenPokemons} />
       <Select
         choosenPokemons={choosenPokemons.pokemonsNames}
         setChoosenPokemons={setChoosenPokemons}
       />
       <Button setModalOpen={setModalOpen} disabled={disabled} />
+      {modalOpnen && (
+        <PopupWindow modalOpen={modalOpnen} setModalOpen={setModalOpen}>
+          <PokemonsInfo choosenPokemons={choosenPokemons} />
+        </PopupWindow>
+      )}
     </div>
   );
 }
