@@ -9,35 +9,43 @@ import {
 } from 'react';
 
 import { IChoosenPokemons } from '../../App';
-import { PokemonData, fetchAllPokemons } from '../../Services/Api';
+import { PokemonData } from '../../Services/Api';
 
-interface IProps {
-  setChoosenPokemons: Dispatch<SetStateAction<IChoosenPokemons>>;
-  choosenPokemons: string[];
+export interface IProps {
+  setChoosenVelues: Dispatch<SetStateAction<IChoosenPokemons>>;
+  choosenValues: string[];
+  options: PokemonData[];
+  title: string;
 }
 
-const Select: FC<IProps> = ({ choosenPokemons, setChoosenPokemons }) => {
-  const [pokemons, setPokemons] = useState<PokemonData[]>([]);
+const Select: FC<IProps> = ({
+  choosenValues,
+  setChoosenVelues,
+  options,
+  title,
+}) => {
+  // const [pokemons, setPokemons] = useState<PokemonData[]>([]);
   const [filter, setFilter] = useState<string>('');
   const [openDropDonw, setOpenDropDown] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
+  const selectRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchAllPokemons().then((data) => {
-      setPokemons(data.res);
-    });
-  }, []);
+  // useEffect(() => {
+  //   fetchAllPokemons().then((data) => {
+  //     setPokemons(data.res);
+  //   });
+  // }, []);
 
   const getVisiblePokemons = (
-    pokemons: PokemonData[],
+    options: PokemonData[],
     filter: string
   ): PokemonData[] => {
     const normalizeFilter: string = filter.toLocaleLowerCase();
     if (filter === '') {
-      return pokemons;
+      return options;
     }
-    return pokemons.filter((pokemon: PokemonData) =>
-      pokemon.name.toLocaleLowerCase().includes(normalizeFilter)
+    return options.filter((option: PokemonData) =>
+      option.name.toLocaleLowerCase().includes(normalizeFilter)
     );
   };
 
@@ -64,42 +72,47 @@ const Select: FC<IProps> = ({ choosenPokemons, setChoosenPokemons }) => {
   });
 
   const onSelectPokemon = (name: string) => {
-    if (choosenPokemons.length >= 4 && !choosenPokemons.includes(name)) {
+    if (choosenValues.length >= 4 && !choosenValues.includes(name)) {
       return;
     }
 
-    const updatedNames = choosenPokemons.includes(name)
-      ? choosenPokemons.filter((pokemonName) => pokemonName !== name)
-      : [...choosenPokemons, name];
+    const updatedNames = choosenValues.includes(name)
+      ? choosenValues.filter((valueName) => valueName !== name)
+      : [...choosenValues, name];
 
-    setChoosenPokemons((prevState) => ({
+    setChoosenVelues((prevState) => ({
       ...prevState,
       pokemonsNames: updatedNames,
     }));
   };
 
-  const visiblePokemons = getVisiblePokemons(pokemons, filter);
+  useEffect(() => {
+    if (selectRef.current) {
+      selectRef.current.focus();
+    }
+  }, []);
 
-  console.log(choosenPokemons);
+  const visiblePokemons = getVisiblePokemons(options, filter);
+
   return (
     <div
       className="text-center w-[400px] m-auto relative cursor-pointer pt-[15px]"
       ref={ref}
     >
-      <h3 className="text-left text-stone-800 text-base pb-[8px]">
-        Choose four Pokemons:
-      </h3>
+      <h3 className="text-left text-stone-800 text-base pb-[8px]">{title}</h3>
       <div
-        className={`bg-white px-[5px] pr-[30px] pl-[10px] w-[400px] h-[34px] py-[3px] m-auto border border-gray-400 hover:border-gray-600 hover:bg-stone-100 ${
+        className={`bg-white px-[5px] pr-[30px] pl-[10px] w-[400px] h-[34px] py-[3px] m-auto border border-gray-400 hover:border-gray-600  focus:outline-none focus:border-gray-600 hover:bg-stone-100 focus:bg-stone-100 ${
           openDropDonw && 'border-gray-600'
         } rounded-[12px] flex justify-center items-center relative`}
         onClick={handleChildClick}
         id="input"
+        ref={selectRef}
+        tabIndex={0}
       >
         <div className="w-full flex items-center">
           <div className="w-full flex items-center gap-[5px]">
-            {choosenPokemons.length > 0 ? (
-              choosenPokemons.map((name, index) => {
+            {choosenValues.length > 0 ? (
+              choosenValues.map((name, index) => {
                 return (
                   <div
                     key={index}
@@ -136,12 +149,12 @@ const Select: FC<IProps> = ({ choosenPokemons, setChoosenPokemons }) => {
               <p className="text-stone-400">Choose your pokemon team</p>
             )}
           </div>
-          {choosenPokemons.length > 0 && (
+          {choosenValues.length > 0 && (
             <button
               type="button"
               className=""
               onClick={() =>
-                setChoosenPokemons((prevState) => ({
+                setChoosenVelues((prevState) => ({
                   ...prevState,
                   pokemonsNames: [],
                 }))
@@ -204,7 +217,7 @@ const Select: FC<IProps> = ({ choosenPokemons, setChoosenPokemons }) => {
                 <li
                   key={index}
                   className={`py=[3px] px-[10px] text-left w-full hover:bg-stone-100 cursor-pointer ${
-                    choosenPokemons.includes(pokemon.name) && 'bg-stone-100'
+                    choosenValues.includes(pokemon.name) && 'bg-stone-100'
                   }`}
                   onClick={(e) => onSelectPokemon(pokemon.name)}
                 >
@@ -220,7 +233,7 @@ const Select: FC<IProps> = ({ choosenPokemons, setChoosenPokemons }) => {
         </ul>
       </div>
       <p className="text-left text-stone-400 text-sm pl-[5px] pt-[4px]">
-        Pokemon selected {choosenPokemons.length}/4
+        selected {choosenValues.length}/4
       </p>
     </div>
   );
